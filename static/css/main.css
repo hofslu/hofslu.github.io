@@ -5,6 +5,12 @@ html, body {
   height: 100vh;
   width: 100vw;
   overflow: hidden;
+  /* background-image: url('http://drechsler-wien.at/images/pattern_web_bg_light_2x.svg?crc=446146739'); */
+  /* background-image: url('https://img.freepik.com/free-vector/gradient-luxury-background_23-2148983366.jpg?w=2000'); */
+  background-image: url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/582d158f-8f07-4157-97b9-d90fbabe6ea1/dehinp8-8e35bfd3-8962-4ef5-978e-fbe917be48ac.jpg/v1/fill/w_1264,h_632,q_70,strp/subspaced_by_moodyblue_dehinp8-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NjQwIiwicGF0aCI6IlwvZlwvNTgyZDE1OGYtOGYwNy00MTU3LTk3YjktZDkwZmJhYmU2ZWExXC9kZWhpbnA4LThlMzViZmQzLTg5NjItNGVmNS05NzhlLWZiZTkxN2JlNDhhYy5qcGciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.0qXYPudAaUlOVTTR-o5CFMOuSDq40Be8Mj5j-apGtAI');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 body {
@@ -12,14 +18,33 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: row;
+  /* background-color: whitesmoke; */
+}
+.content-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  /* background-color: rgba(245, 245, 245, 0.626); */
+  padding: 20px;
+  backdrop-filter: blur(5px);
+  border-radius: 30px;
+  box-shadow: 0px 0px 20px 0px white;
+}
+@media screen and (max-width: 600px) {
+  .content-wrapper {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0);
+  }
 }
 
 .content {
   display: flex;
   align-items: center;
   flex-direction: column;
-  padding: 20px;
-  margin: 0px;
+  padding: 15px;
+  margin: 10px;
   /* min-height: 500px; */
   min-width: 350px;
   background-color: antiquewhite;
@@ -47,12 +72,12 @@ body {
   width: 150px;
   height: 200px;
   position: relative;
-  bottom: 0;
-  right: 5px;
 }
-@media screen and (max-width: 550px) {
+@media screen and (max-width: 600px) {
   #model_view {
     position: absolute;
+    bottom: 20px;
+    right: 5px;
   }
 }
 
@@ -81,6 +106,9 @@ a:visited {
   color: transparent;
 }
 
+.link-container {
+  margin-bottom: 7px;
+}
 .link {
   color: black;
   text-decoration: none;

@@ -10,32 +10,38 @@
 
 </head>
 <body>
-    <div class="content">
-        <div class="header_wraper">
-            <div class="header_content">
-                <span>Hello&nbsp;</span>
-                <a id="world_link" href="https://wwf.org/">
-                    <span class="rainbow-text">world</span>
-                </a>
-                <span>&nbsp;🤗</span>
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="header_wraper">
+                <div class="header_content">
+                    <span>Hello&nbsp;</span>
+                    <a id="world_link" href="https://wwf.org/">
+                        <span class="rainbow-text">world</span>
+                    </a>
+                    <span>&nbsp;🤗</span>
+                </div>
+            </div>
+            <div class="hyphen"></div>
+            <!-- Use it like any other HTML element -->
+            <div >
+                <div class="link-container">
+                    <a id="cv_link" class="link" href="/lukas-hofstetter/">-> Lukas Hofstetter</a>
+                </div>
+                <div class="link-container">
+                    <a id="playground_link" class="link" href="/playground/">-> playground</a>
+                </div>
             </div>
         </div>
-        <div class="hyphen"></div>
-        <!-- Use it like any other HTML element -->
-        <div >
-            <a id="cv_link" class="link" href="/lukas-hofstetter/">-> Lukas Hofstetter</a>
-            <br>
-            <a id="playground_link" class="link" href="/playground/">-> playground</a>
-        </div>
+        <model-viewer id="model_view"
+            alt="Neil Armstrong's Spacesuit from the Smithsonian Digitization Programs Office and National Air and Space Museum"
+            src="assets/models/mini-Arno-rigged-food-animation.gltf" 
+            ar 
+            shadow-intensity="1" 
+            camera-controls 
+            touch-action="pan-y">
+        </model-viewer>
     </div>
-    <model-viewer id="model_view"
-        alt="Neil Armstrong's Spacesuit from the Smithsonian Digitization Programs Office and National Air and Space Museum"
-        src="assets/models/mini-Arno-rigged-food-animation.gltf" 
-        ar 
-        shadow-intensity="1" 
-        camera-controls 
-        touch-action="pan-y">
-    </model-viewer>
+
 </body>
 </html>
 
