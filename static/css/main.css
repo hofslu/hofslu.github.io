@@ -73,20 +73,20 @@ a:visited {
   color: transparent;
 }
 
-#cv_link {
+.link {
   color: black;
   text-decoration: none;
   letter-spacing: 5px;
 }
-#cv_link:link{
+.link:link{
   color: black;
   text-decoration: none;
 }
-#cv_link:visited{
+.link:visited{
   color: black;
   text-decoration: none;
 }
-#cv_link:hover{
+.link:hover{
   color: black;
   text-decoration: none;
 }
