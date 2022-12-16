@@ -17,28 +17,41 @@
 // 
 // ---------------------------------------------------------------------------------------------------
 
+//                                         _ o___________________________________________________q  
+//                                     ,__' /                                                   /|  
+//                                     \_  º---------------------------------------------------P/#  
+//                                       ˚\|----- Initialization ------------------------------|/   
+//                                         o--------------------‚------------------------------'    
+
+const renderer_seet = document.getElementById("augmentation_canvas")
+// 
 const scene = new THREE.Scene();
 // camera
 const camera = new THREE.Camera();
 scene.add(camera)
+camera.position.z = 0;
 
 // renderer
 const renderer = new THREE.WebGLRenderer({ 
     alpha: true
  });
 renderer.setSize( window.innerWidth, window.innerHeight );
-document.body.appendChild( renderer.domElement );
+renderer_seet.appendChild( renderer.domElement );
 
 
-
+//       _ o___________________________________________________q  
+//   ,__' /                                                   /|  
+//   \_  º---------------------------------------------------P/#  
+//     ˚\|----- Marker tracking -----------------------------|/   
+//       o--------------------‚------------------------------'    
 // AR-Toolkit:: Source
 var ArToolkitSource = new THREEx.ArToolkitSource({
     sourceType: "webcam",
 });
 ArToolkitSource.init(function() {
     setTimeout(function(){
-        ArToolkitSource.onResizeElement();
-        ArToolkitSource.copyElementSizeTo();
+        onResize();
+
     }, 2000)
 })
 // AR-Toolkit:: Context
@@ -53,27 +66,73 @@ ArToolkitContext.init(function() {
 // AR-Toolkit:: MarkerControls
 var ArMarkerControls = new THREEx.ArMarkerControls(ArToolkitContext, camera, {
     type: 'pattern',
-    patternUrl: './assets/marker/TU-marker.patt',
+    patternUrl: './assets/marker/pattern-basic.patt',
     changeMatrixMode: 'cameraTransformMatrix'
 })
 scene.visible = false
 
+// handle resize
+window.addEventListener('resize', function(){
+    onResize();
+    console.log("resized")
+})
+
+function onResize(){
+    ArToolkitSource.onResizeElement()
+    ArToolkitSource.copyElementSizeTo(renderer.domElement)
+    if( ArToolkitContext.arController !== null ){
+        arToolkitSource.copyElementSizeTo(ArToolkitContext.arController.canvas)
+    }
+}
+
+
+//       _ o___________________________________________________q  
+//   ,__' /                                                   /|  
+//   \_  º---------------------------------------------------P/#  
+//     ˚\|----- NFT Natural Feature tracking ----------------|/   
+//       o--------------------‚------------------------------'     
+
+
+
+
+
+//       _ o___________________________________________________q  
+//   ,__' /                                                   /|  
+//   \_  º---------------------------------------------------P/#  
+//     ˚\|----- basic Geometries ------------------------------|/   
+//       o--------------------‚------------------------------'    
 const geometry = new THREE.BoxGeometry( 1, 1, 1 );
 const material = new THREE.MeshNormalMaterial( { 
-    color: 0x00ff00 
+    color: 0x00ff00,
+    opacity: 0.5
 } );
 const cube = new THREE.Mesh( geometry, material );
 cube.position.y = geometry.parameters.height/2;
 scene.add( cube );
 
 
+//       _ o___________________________________________________q  
+//   ,__' /                                                   /|  
+//   \_  º---------------------------------------------------P/#  
+//     ˚\|----- Model loading ------------------------------|/   
+//       o--------------------‚------------------------------'    
 
-camera.position.z = 0;
 
+
+
+
+
+
+//       _ o___________________________________________________q  
+//   ,__' /                                                   /|  
+//   \_  º---------------------------------------------------P/#  
+//     ˚\|----- Animation -----------------------------------|/   
+//       o--------------------‚------------------------------'    
 function animate() {
     requestAnimationFrame( animate );
     ArToolkitContext.update(ArToolkitSource.domElement);
     scene.visible = camera.visible;
+
     // cube.rotation.x += 0.01;
     // cube.rotation.y += 0.01;
     renderer.render( scene, camera );
