@@ -23,6 +23,9 @@
 //                                       ˚\|----- Initialization ------------------------------|/   
 //                                         o--------------------‚------------------------------'    
 
+// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+
+
 const renderer_seet = document.getElementById("augmentation_canvas")
 // 
 const scene = new THREE.Scene();
@@ -33,10 +36,13 @@ camera.position.z = 0;
 
 // renderer
 const renderer = new THREE.WebGLRenderer({ 
-    alpha: true
+    alpha: true,
+    antialias: true
  });
 renderer.setSize( window.innerWidth, window.innerHeight );
 renderer_seet.appendChild( renderer.domElement );
+
+// controls
 
 
 //       _ o___________________________________________________q  
@@ -89,7 +95,7 @@ function onResize(){
 //       _ o___________________________________________________q  
 //   ,__' /                                                   /|  
 //   \_  º---------------------------------------------------P/#  
-//     ˚\|----- NFT Natural Feature tracking ----------------|/   
+//     ˚\|----- NFT Natural Feature Tracking ----------------|/   
 //       o--------------------‚------------------------------'     
 
 
@@ -114,13 +120,31 @@ scene.add( cube );
 //       _ o___________________________________________________q  
 //   ,__' /                                                   /|  
 //   \_  º---------------------------------------------------P/#  
-//     ˚\|----- Model loading ------------------------------|/   
+//     ˚\|----- Model Loading -------------------------------|/   
+//       o--------------------‚------------------------------'    
+
+// var loader = new GTLFLoader
+
+//       _ o___________________________________________________q  
+//   ,__' /                                                   /|  
+//   \_  º---------------------------------------------------P/#  
+//     ˚\|----- Model Animation -----------------------------|/   
 //       o--------------------‚------------------------------'    
 
 
 
 
+       
+//  ___._______.___.___.___.__.___.__p  
+//  __/__NFT_Collection___/__/___/_q/|  
+//  -˚-------˚---˚---˚---°---˚--˚--|/˚  
+//  \________/----\__/----\_/----\_/    
 
+// create connect button
+// get contract???
+// connect to MetaMask (wallet)
+// create collect button
+// transfer from Server to wallet
 
 
 //       _ o___________________________________________________q  
