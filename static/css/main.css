@@ -72,7 +72,7 @@ body {
   /* change comments here */
   position: absolute;
   width: 100vw;
-  height: 100hw;
+  height: 100vh;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
