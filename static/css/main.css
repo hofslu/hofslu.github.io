@@ -69,9 +69,17 @@ body {
   letter-spacing: .3rem;
 }
 #model_view {
-  width: 150px;
-  height: 200px;
-  position: relative;
+  /* change comments here */
+  position: absolute;
+  width: 100vw;
+  height: 100hw;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  /* width: 150px; */
+  /* height: 200px; */
+  /* position: relative; */
 }
 @media screen and (max-width: 600px) {
   #model_view {
