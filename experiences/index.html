@@ -1,12 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Experiences</title>
-</head>
-<body>
-    An Experiences List to come...
-</body>
+    <script
+      type="module"
+      src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"
+    ></script>
+    <link rel="stylesheet" href="/static/css/experiences.css" />
+  </head>
+  <body>
+    <section class="card-container">
+      <!-- Card 1 -->
+      <div class="card">
+        <a
+          href="https://www.instagram.com/ar/7462706543773292/?ch=M2VmYjI4ZjI4YjY4ZjQwMDFjN2UwYTUwZTYyYmU4ZGI%3D"
+          target="_blank"
+        >
+          <div class="card-header">
+            <img
+              src="/static/img/motorcicle_marker.png"
+              alt="Motorcylce Image"
+            />
+          </div>
+        </a>
+        <div class="card-body">
+          <h2>🏍 Motorcycle</h2>
+          <model-viewer
+            alt="description of the model"
+            src="/assets/models/mini-arno_embeded.gltf"
+            ar
+            shadow-intensity="1"
+            camera-controls
+            touch-action="pan-y"
+          >
+          </model-viewer>
+        </div>
+      </div>
+      <!-- Card 2 -->
+      <div class="card">
+        <a
+          href="https://www.instagram.com/ar/7462706543773292/?ch=M2VmYjI4ZjI4YjY4ZjQwMDFjN2UwYTUwZTYyYmU4ZGI%3D"
+          target="_blank"
+        >
+          <div class="card-header">
+            <img src="/static/img/tea_marker.png" alt="Tea Image" />
+          </div>
+        </a>
+        <div class="card-body">
+          <h2>🍵 Tea</h2>
+          <model-viewer
+            alt="description of the model"
+            src="/assets/models/mini-arno_embeded.gltf"
+            ar
+            shadow-intensity="1"
+            camera-controls
+            touch-action="pan-y"
+          >
+          </model-viewer>
+        </div>
+      </div>
+      <!-- Card 3 -->
+      <div class="card">
+        <a
+          href="https://www.instagram.com/ar/7462706543773292/?ch=M2VmYjI4ZjI4YjY4ZjQwMDFjN2UwYTUwZTYyYmU4ZGI%3D"
+          target="_blank"
+        >
+          <div class="card-header">
+            <img src="/static/img/kolschitzky_marker.jpeg" alt="Coffee Image" />
+          </div>
+        </a>
+        <div class="card-body">
+          <h2>☕ Coffee</h2>
+          <model-viewer
+            alt="description of the model"
+            src="/assets/models/arno_kolschitzky.glb"
+            ar
+            shadow-intensity="1"
+            camera-controls
+            touch-action="pan-y"
+          >
+          </model-viewer>
+        </div>
+      </div>
+      <!-- Card 4 -->
+      <div class="card">
+        <a
+          href="https://www.instagram.com/ar/2237914316404043/?ch=YjJjMDM3MWYzMjdjZjQ4ODA1YjY0NjA4ZDFmZmRhNDk%3D"
+          target="_blank"
+        >
+          <div class="card-header">
+            <img src="/static/img/freiraum_marker.png" alt="Freiraum Image" />
+          </div>
+        </a>
+        <div class="card-body">
+          <h2>🕊 Freiraum</h2>
+          <model-viewer
+            alt="description of the model"
+            src="/assets/models/arno_appearance_arno_showcase.gltf"
+            ar
+            shadow-intensity="1"
+            camera-controls
+            touch-action="pan-y"
+            position="0 0 0"
+            background-color="#000000"
+          >
+          </model-viewer>
+        </div>
+      </div>
+      <!-- Add more cards similarly -->
+    </section>
+    <!-- Include model-viewer component -->
+  </body>
 </html>
