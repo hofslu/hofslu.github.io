@@ -70,7 +70,7 @@ body {
 }
 #model_view {
   /* change comments here */
-  position: absolute;
+  position: relative;
   width: 20vw;
   height: 100vh;
   right: 0;
