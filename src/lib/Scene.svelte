@@ -1,7 +1,21 @@
 <script lang="ts">
-  import { T } from '@threlte/core';
+  import { T, useThrelte } from '@threlte/core';
   import { OrbitControls, ContactShadows } from '@threlte/extras';
   import Marimba from './Marimba.svelte';
+
+  const { renderer } = useThrelte();
+
+  // Block non-ctrl wheel events at the canvas before OrbitControls sees them.
+  // Ctrl+scroll still reaches OrbitControls for zoom.
+  $effect(() => {
+    const canvas = renderer?.domElement;
+    if (!canvas) return;
+    function blockZoom(e: WheelEvent) {
+      if (!e.ctrlKey) e.stopImmediatePropagation();
+    }
+    canvas.addEventListener('wheel', blockZoom, { capture: true, passive: true });
+    return () => canvas.removeEventListener('wheel', blockZoom, { capture: true } as EventListenerOptions);
+  });
 </script>
 
 <!-- Lighting -->

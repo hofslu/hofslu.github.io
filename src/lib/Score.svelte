@@ -189,16 +189,17 @@
   // ─── Scroll → scrub playhead ──────────────────────────────────────────────
   $effect(() => {
     function onWheel(e: WheelEvent) {
+      if (e.ctrlKey) return;  // ctrl+scroll → let OrbitControls zoom
       e.preventDefault();
-      // normalise trackpad / mouse wheel - deltaMode 0=px, 1=lines, 2=page
       const raw = e.deltaMode === 0 ? e.deltaY : e.deltaY * 40;
       const step = raw * 0.00035;
       const newX = Math.max(0, Math.min(1, headX + step));
       triggerBetween(headX, newX);
       headX = newX;
     }
-    window.addEventListener('wheel', onWheel, { passive: false });
-    return () => window.removeEventListener('wheel', onWheel);
+    // capture: true so this fires before the event reaches the canvas
+    window.addEventListener('wheel', onWheel, { passive: false, capture: true });
+    return () => window.removeEventListener('wheel', onWheel, { capture: true } as EventListenerOptions);
   });
 
   let hx    = $derived(noteX(headX));
