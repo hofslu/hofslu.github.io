@@ -59,12 +59,12 @@ export const CAMERA_POSES: {
   pos: [number, number, number];
   target: [number, number, number];
 }[] = [
-  { pos: [0, 1.4, 5.0], target: [0, 0.4, 0] },       // 0 hero — centred
-  { pos: [-2.2, 1.2, 4.2], target: [0.6, 0.4, 0] },  // 1 about
-  { pos: [-2.0, 1.2, 4.4], target: [0.6, 0.4, 0] },  // 2 recordings
-  { pos: [-2.4, 1.0, 4.0], target: [0.6, 0.4, 0] },  // 3 calendar
-  { pos: [-2.0, 1.1, 4.2], target: [0.6, 0.4, 0] },  // 4 projects
-  { pos: [0, 1.8, 4.5], target: [0, 0.4, 0] },        // 5 contact — centred again
+  { pos: [0, 2.0, 5.0], target: [0, 0.6, 0] }, // 0 hero — centred, elevated
+  { pos: [-3.0, 1.7, 4.2], target: [0.8, 0.5, 0] }, // 1 about
+  { pos: [-2.8, 1.7, 4.4], target: [0.8, 0.5, 0] }, // 2 recordings
+  { pos: [-3.2, 1.6, 4.0], target: [0.8, 0.5, 0] }, // 3 calendar
+  { pos: [-2.8, 1.6, 4.2], target: [0.8, 0.5, 0] }, // 4 projects
+  { pos: [-3.0, 1.8, 4.5], target: [0.8, 0.5, 0] }, // 5 contact — far left, panel clears marimba
 ];
 
 export const sectionState = $state({ current: 0 });
