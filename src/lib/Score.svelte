@@ -186,6 +186,21 @@
     dragging = false; lastX = null;
   }
 
+  // ─── Scroll → scrub playhead ──────────────────────────────────────────────
+  $effect(() => {
+    function onWheel(e: WheelEvent) {
+      e.preventDefault();
+      // normalise trackpad / mouse wheel - deltaMode 0=px, 1=lines, 2=page
+      const raw = e.deltaMode === 0 ? e.deltaY : e.deltaY * 40;
+      const step = raw * 0.00035;
+      const newX = Math.max(0, Math.min(1, headX + step));
+      triggerBetween(headX, newX);
+      headX = newX;
+    }
+    window.addEventListener('wheel', onWheel, { passive: false });
+    return () => window.removeEventListener('wheel', onWheel);
+  });
+
   let hx    = $derived(noteX(headX));
   let endX  = $derived(noteX(1) + 10);
 </script>
@@ -218,7 +233,7 @@
       <stop offset="100%" stop-color="#ede0b8" />
     </linearGradient>
     <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
-      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feGaussianBlur stdDeviation="4" result="blur" />
       <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
     </filter>
   </defs>
@@ -271,13 +286,13 @@
       {#each ledgerT(n.keyIdx) as ly}
         {@const isLit = litKeys.has(litKey(chord.t, n.keyIdx))}
         <line x1={cx + n.xOff - 9} y1={ly} x2={cx + n.xOff + 9} y2={ly}
-          stroke={isLit ? '#ff6a00' : '#8b7355'} stroke-width="1.2" opacity={isLit ? 1 : 0.7} />
+          stroke={isLit ? '#c4a97d' : '#8b7355'} stroke-width="1.2" opacity={isLit ? 1 : 0.7} />
       {/each}
     {/each}
     <line x1={cx + si.x} y1={si.y1} x2={cx + si.x} y2={si.y2} stroke="#8b7355" stroke-width="1.3" />
     {#each lay as n}
       {@const isLit = litKeys.has(litKey(chord.t, n.keyIdx))}
-      {@const col = isLit ? '#ff6a00' : '#8b7355'}
+      {@const col = isLit ? '#c4a97d' : '#8b7355'}
       {#if isSharp(n.keyIdx)}
         <text x={cx + n.xOff - 13} y={n.y + 4} font-size="11" font-family="serif"
           fill={col} opacity={isLit ? 1 : 0.9} style="user-select:none">♯</text>
@@ -296,13 +311,13 @@
       {#each ledgerB(n.keyIdx) as ly}
         {@const isLit = litKeys.has(litKey(chord.t, n.keyIdx))}
         <line x1={cx + n.xOff - 9} y1={ly} x2={cx + n.xOff + 9} y2={ly}
-          stroke={isLit ? '#ff6a00' : '#8b7355'} stroke-width="1.2" opacity={isLit ? 1 : 0.7} />
+          stroke={isLit ? '#c4a97d' : '#8b7355'} stroke-width="1.2" opacity={isLit ? 1 : 0.7} />
       {/each}
     {/each}
     <line x1={cx + si.x} y1={si.y1} x2={cx + si.x} y2={si.y2} stroke="#8b7355" stroke-width="1.3" />
     {#each lay as n}
       {@const isLit = litKeys.has(litKey(chord.t, n.keyIdx))}
-      {@const col = isLit ? '#ff6a00' : '#8b7355'}
+      {@const col = isLit ? '#c4a97d' : '#8b7355'}
       {#if isSharp(n.keyIdx)}
         <text x={cx + n.xOff - 13} y={n.y + 4} font-size="11" font-family="serif"
           fill={col} opacity={isLit ? 1 : 0.9} style="user-select:none">♯</text>

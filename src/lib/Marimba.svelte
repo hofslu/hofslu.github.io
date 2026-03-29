@@ -9,7 +9,7 @@
   const NON_KEYS = new Set(['stage', 'ground']);
 
   const EMISSIVE_HOVER  = new THREE.Color('#8b7355');  // matches .art in header
-  const EMISSIVE_HIT    = new THREE.Color('#ff6a00');  // orange hit burst
+  const EMISSIVE_HIT    = new THREE.Color('#c4a97d');  // .art gold hit burst (bright)
   const EMISSIVE_OFF    = new THREE.Color('#000000');
 
   const { camera, renderer } = useThrelte();

@@ -30,8 +30,8 @@
   .note {
     position: absolute;
     font-size: 1.6rem;
-    color: #ff6a00;
-    text-shadow: 0 0 12px #ff6a00aa, 0 0 24px #ff9f00aa;
+    color: #c4a97d;
+    text-shadow: 0 0 12px #c4a97daa, 0 0 24px #e8d4a0aa;
     transform-origin: center bottom;
     /* two independent animations: rise+fade  and  x-wobble */
     animation:
