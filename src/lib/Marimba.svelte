@@ -3,10 +3,12 @@
   import { useGltf } from '@threlte/extras';
   import * as THREE from 'three';
   import { spawnNote } from './notes.svelte.ts';
-  import { marimbaState } from './marimba.svelte.ts';
+  import { marimbaState, KEY_NAMES } from './marimba.svelte.ts';
   import { playMarimbaNote } from './audio.ts';
 
-  const NON_KEYS = new Set(['stage', 'ground']);
+  // Three.js GLTFLoader strips '.' from node names (plate.C2 → plateC2).
+  // Build a map from the stripped name → chromatic index once at module init.
+  const KEY_NAME_MAP = new Map(KEY_NAMES.map((k, i) => [k.replace('.', ''), i]));
 
   const EMISSIVE_HOVER  = new THREE.Color('#8b7355');  // matches .art in header
   const EMISSIVE_HIT    = new THREE.Color('#c4a97d');  // .art gold hit burst (bright)
@@ -21,17 +23,16 @@
   // Per-mesh state
   type KeyState = {
     mesh: THREE.Mesh;
+    noteIdx: number;  // chromatic index from KEY_NAMES (0 = C2 … 60 = C7)
     hit: number;      // 0–1, decays each frame after click
   };
   let keys: KeyState[] = [];
-  // Keys sorted by world-X position (left = low pitch) — index matches chromatic order
-  let sortedKeys: KeyState[] = [];
+  // Fast index lookup: noteIdx → KeyState
+  let keyByIdx = new Map<number, KeyState>();
 
-  function hitState(state: KeyState, idx?: number) {
+  function hitState(state: KeyState) {
     state.hit = 1.0;
-    // Resolve chromatic index: try supplied idx, then position in sortedKeys
-    const noteIdx = idx ?? sortedKeys.indexOf(state);
-    if (noteIdx >= 0) playMarimbaNote(noteIdx);
+    if (state.noteIdx >= 0) playMarimbaNote(state.noteIdx);
     if (renderer && camera.current) {
       const pos = new THREE.Vector3();
       state.mesh.getWorldPosition(pos);
@@ -44,34 +45,37 @@
     }
   }
 
+  // useGltf returns a Promise — use .then() to populate keys once loaded.
+  // Name-based lookup (KEY_NAMES.indexOf) doesn't need world transforms,
+  // so running inside .then() is fine.
   $effect(() => {
     gltfStore.then((gltf) => {
       keys = [];
+      keyByIdx = new Map();
       gltf.scene.traverse((obj) => {
-        if (!(obj instanceof THREE.Mesh) || NON_KEYS.has(obj.name)) return;
+        if (!(obj instanceof THREE.Mesh)) return;
+        const noteIdx = KEY_NAME_MAP.get(obj.name) ?? -1;
+        if (noteIdx === -1) return;  // not a playable bar
 
         // Clone material so each key is independently coloured
-        const mat = (obj.material as THREE.MeshStandardMaterial).clone();
+        const rawMat = Array.isArray(obj.material) ? obj.material[0] : obj.material;
+        const mat = (rawMat as THREE.MeshStandardMaterial).clone();
         mat.emissive = EMISSIVE_OFF.clone();
         mat.emissiveIntensity = 1;
         obj.material = mat;
         obj.scale.setScalar(1.0);
 
-        keys.push({ mesh: obj as THREE.Mesh, hit: 0 });
+        const state: KeyState = { mesh: obj as THREE.Mesh, noteIdx, hit: 0 };
+        keys.push(state);
+        keyByIdx.set(noteIdx, state);
       });
 
-      // Sort by world X so index 0 = leftmost (lowest) key — matches chromatic order
-      const _pos = new THREE.Vector3();
-      sortedKeys = [...keys].sort((a, b) => {
-        a.mesh.getWorldPosition(_pos); const ax = _pos.x;
-        b.mesh.getWorldPosition(_pos); return ax - _pos.x;
-      });
-
-      // Register direct trigger so Score doesn't need name matching
+      // Register direct trigger — index comes straight from KEY_NAMES, no sorting needed
       marimbaState.triggerByIndex = (idx: number) => {
-        const state = sortedKeys[idx];
-        if (state) hitState(state, idx);
+        const state = keyByIdx.get(idx);
+        if (state) hitState(state);
       };
+
     });
   });
 
@@ -91,7 +95,7 @@
     if (!hits.length) return;
 
     const state = keys.find(k => k.mesh === hits[0].object);
-    if (state) hitState(state, sortedKeys.indexOf(state));
+    if (state) hitState(state);
   }
 
   const _emissive = new THREE.Color();
@@ -102,7 +106,8 @@
     // Drain name-based pending queue (fallback path)
     if (marimbaState.pending.length) {
       for (const name of marimbaState.pending) {
-        const state = keys.find(k => k.mesh.name === name);
+        const idx = KEY_NAMES.indexOf(name);
+        const state = idx !== -1 ? keyByIdx.get(idx) : undefined;
         if (state) hitState(state);
       }
       marimbaState.pending.length = 0;
