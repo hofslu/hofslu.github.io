@@ -2,6 +2,7 @@
   import { Canvas } from '@threlte/core';
   import Scene from '$lib/Scene.svelte';
   import NoteParticles from '$lib/NoteParticles.svelte';
+  import Score from '$lib/Score.svelte';
 </script>
 
 <svelte:head>
@@ -22,6 +23,7 @@
   </div>
 
   <NoteParticles />
+  <Score />
 </main>
 
 <style>
@@ -75,6 +77,6 @@
 
   .canvas-wrapper {
     width: 100%;
-    height: 100%;
+    height: calc(100% - 165px);
   }
 </style>

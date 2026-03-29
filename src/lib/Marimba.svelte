@@ -3,6 +3,8 @@
   import { useGltf } from '@threlte/extras';
   import * as THREE from 'three';
   import { spawnNote } from './notes.svelte.ts';
+  import { marimbaState } from './marimba.svelte.ts';
+  import { playMarimbaNote } from './audio.ts';
 
   const NON_KEYS = new Set(['stage', 'ground']);
 
@@ -22,6 +24,25 @@
     hit: number;      // 0–1, decays each frame after click
   };
   let keys: KeyState[] = [];
+  // Keys sorted by world-X position (left = low pitch) — index matches chromatic order
+  let sortedKeys: KeyState[] = [];
+
+  function hitState(state: KeyState, idx?: number) {
+    state.hit = 1.0;
+    // Resolve chromatic index: try supplied idx, then position in sortedKeys
+    const noteIdx = idx ?? sortedKeys.indexOf(state);
+    if (noteIdx >= 0) playMarimbaNote(noteIdx);
+    if (renderer && camera.current) {
+      const pos = new THREE.Vector3();
+      state.mesh.getWorldPosition(pos);
+      pos.project(camera.current);
+      const canvas = renderer.domElement;
+      const rect = canvas.getBoundingClientRect();
+      const sx = rect.left + (pos.x *  0.5 + 0.5) * rect.width;
+      const sy = rect.top  + (pos.y * -0.5 + 0.5) * rect.height;
+      spawnNote(sx, sy);
+    }
+  }
 
   $effect(() => {
     gltfStore.then((gltf) => {
@@ -38,11 +59,24 @@
 
         keys.push({ mesh: obj as THREE.Mesh, hit: 0 });
       });
+
+      // Sort by world X so index 0 = leftmost (lowest) key — matches chromatic order
+      const _pos = new THREE.Vector3();
+      sortedKeys = [...keys].sort((a, b) => {
+        a.mesh.getWorldPosition(_pos); const ax = _pos.x;
+        b.mesh.getWorldPosition(_pos); return ax - _pos.x;
+      });
+
+      // Register direct trigger so Score doesn't need name matching
+      marimbaState.triggerByIndex = (idx: number) => {
+        const state = sortedKeys[idx];
+        if (state) hitState(state, idx);
+      };
     });
   });
 
   function onMouseMove(e: MouseEvent) {
-    const el = renderer.current?.domElement;
+    const el = renderer?.domElement;
     const rect = el
       ? el.getBoundingClientRect()
       : { left: 0, top: 0, width: window.innerWidth, height: window.innerHeight };
@@ -50,31 +84,29 @@
     mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
   }
 
-  const _worldPos = new THREE.Vector3();
-
   function onClick() {
-    if (!keys.length || !camera.current || !renderer.current) return;
+    if (!keys.length || !camera.current || !renderer) return;
     raycaster.setFromCamera(mouse, camera.current);
     const hits = raycaster.intersectObjects(keys.map(k => k.mesh), false);
     if (!hits.length) return;
 
     const state = keys.find(k => k.mesh === hits[0].object);
-    if (!state) return;
-    state.hit = 1.0;
-
-    // Project hit point to screen coords for the note spawn position
-    const canvas = renderer.current.domElement;
-    const rect = canvas.getBoundingClientRect();
-    _worldPos.copy(hits[0].point).project(camera.current);
-    const screenX = rect.left + (_worldPos.x *  0.5 + 0.5) * rect.width;
-    const screenY = rect.top  + (_worldPos.y * -0.5 + 0.5) * rect.height;
-    spawnNote(screenX, screenY);
+    if (state) hitState(state, sortedKeys.indexOf(state));
   }
 
   const _emissive = new THREE.Color();
 
   useTask((_delta) => {
     if (!keys.length || !camera.current) return;
+
+    // Drain name-based pending queue (fallback path)
+    if (marimbaState.pending.length) {
+      for (const name of marimbaState.pending) {
+        const state = keys.find(k => k.mesh.name === name);
+        if (state) hitState(state);
+      }
+      marimbaState.pending.length = 0;
+    }
 
     raycaster.setFromCamera(mouse, camera.current);
     const hits = raycaster.intersectObjects(keys.map(k => k.mesh), false);
@@ -105,8 +137,8 @@
       mat.emissive.lerp(_emissive, 0.2);
     }
 
-    if (renderer.current) {
-      renderer.current.domElement.style.cursor = anyHovered ? 'pointer' : 'default';
+    if (renderer) {
+      renderer.domElement.style.cursor = anyHovered ? 'pointer' : 'default';
     }
   });
 </script>
