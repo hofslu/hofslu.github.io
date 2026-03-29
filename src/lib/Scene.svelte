@@ -1,6 +1,7 @@
 <script lang="ts">
   import { T } from '@threlte/core';
-  import { GLTF, OrbitControls, ContactShadows } from '@threlte/extras';
+  import { OrbitControls, ContactShadows } from '@threlte/extras';
+  import Marimba from './Marimba.svelte';
 </script>
 
 <!-- Lighting -->
@@ -17,13 +18,13 @@
     maxDistance={12}
     maxPolarAngle={Math.PI / 1.9}
     target={[0, 0.4, 0]}
-    autoRotate
+    autoRotate={false}
     autoRotateSpeed={0.4}
   />
 </T.PerspectiveCamera>
 
-<!-- Marimba model -->
-<GLTF url="/models/marimba.glb" position={[0, 0, 0]} />
+<!-- Marimba model with hover detection -->
+<Marimba />
 
 <!-- Soft shadow under the model -->
 <ContactShadows
