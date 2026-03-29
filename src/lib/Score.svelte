@@ -186,21 +186,8 @@
     dragging = false; lastX = null;
   }
 
-  // ─── Scroll → scrub playhead ──────────────────────────────────────────────
-  $effect(() => {
-    function onWheel(e: WheelEvent) {
-      if (e.ctrlKey) return;  // ctrl+scroll → let OrbitControls zoom
-      e.preventDefault();
-      const raw = e.deltaMode === 0 ? e.deltaY : e.deltaY * 40;
-      const step = raw * 0.00035;
-      const newX = Math.max(0, Math.min(1, headX + step));
-      triggerBetween(headX, newX);
-      headX = newX;
-    }
-    // capture: true so this fires before the event reaches the canvas
-    window.addEventListener('wheel', onWheel, { passive: false, capture: true });
-    return () => window.removeEventListener('wheel', onWheel, { capture: true } as EventListenerOptions);
-  });
+  // ─── Scroll → scrub removed: snap scroll owns the wheel now.
+  //     Scrub by dragging the playhead directly.
 
   let hx    = $derived(noteX(headX));
   let endX  = $derived(noteX(1) + 10);
