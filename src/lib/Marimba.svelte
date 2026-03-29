@@ -2,6 +2,7 @@
   import { T, useThrelte, useTask } from '@threlte/core';
   import { useGltf } from '@threlte/extras';
   import * as THREE from 'three';
+  import { spawnNote } from './notes.svelte.ts';
 
   const NON_KEYS = new Set(['stage', 'ground']);
 
@@ -49,13 +50,25 @@
     mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
   }
 
+  const _worldPos = new THREE.Vector3();
+
   function onClick() {
-    if (!keys.length || !camera.current) return;
+    if (!keys.length || !camera.current || !renderer.current) return;
     raycaster.setFromCamera(mouse, camera.current);
     const hits = raycaster.intersectObjects(keys.map(k => k.mesh), false);
     if (!hits.length) return;
+
     const state = keys.find(k => k.mesh === hits[0].object);
-    if (state) state.hit = 1.0;
+    if (!state) return;
+    state.hit = 1.0;
+
+    // Project hit point to screen coords for the note spawn position
+    const canvas = renderer.current.domElement;
+    const rect = canvas.getBoundingClientRect();
+    _worldPos.copy(hits[0].point).project(camera.current);
+    const screenX = rect.left + (_worldPos.x *  0.5 + 0.5) * rect.width;
+    const screenY = rect.top  + (_worldPos.y * -0.5 + 0.5) * rect.height;
+    spawnNote(screenX, screenY);
   }
 
   const _emissive = new THREE.Color();

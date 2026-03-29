@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Canvas } from '@threlte/core';
   import Scene from '$lib/Scene.svelte';
+  import NoteParticles from '$lib/NoteParticles.svelte';
 </script>
 
 <svelte:head>
@@ -19,6 +20,8 @@
       <Scene />
     </Canvas>
   </div>
+
+  <NoteParticles />
 </main>
 
 <style>
